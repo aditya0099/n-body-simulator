@@ -1,8 +1,7 @@
-# 
 # Project Proposal: A Simulation and Visualization of The N-Body Problem
 ## Background and Motivation
 The n-body problem is a generalization of the famous but unsolvable three body problem in physics. The problem statement is as follows:
-> Given a set of `n` bodies with fixed masses, initial positions and initial velocities that iteract gravitationally, describe the motion of these objects at any given future time.
+> Given a set of `n` bodies with fixed masses, initial positions and initial velocities that interact gravitationally, describe the motion of these objects at any given future time.
 
 The two-body version of this problem can be solved easily, but there is no general, closed-form solution for `n > 2`.The true motions of these bodies, however, can be accurately approximated through the use of computer simulations. N-body simulations, therefore, are critical in allowing cosmologists and astrophysicists to model and predict the motion of complex celestial systems.
 
@@ -29,3 +28,10 @@ This project will make use of the following libraries:
 1. [ofxGui](http://openframeworks.cc/documentation/ofxGui/) - this library will be used to take user input regarding the initial states of the simulation in a user friendly way. It will also be used during the simulation to pause and step through the frames and to manipulate the point of view in the simulation.
 1. [ofxGui](http://openframeworks.cc/documentation/ofxXmlSettings/) - this library will be used to save and load user input in a more efficient way. It will also be used to store the state of a certain simulation for reloading.
 
+## Further Reading
+For more information regarding the N-Body problem, the reader may consult the following resources:
+* [Wolfram Research](http://scienceworld.wolfram.com/physics/n-BodyProblem.html)
+* [Wikipedia article on the N-Body problem](https://en.wikipedia.org/wiki/N-body_problem)
+* [Wikipeida article on the N-Body simulation](https://en.wikipedia.org/wiki/N-body_simulation)
+* [Scholarpedia article on the three-body problem](http://www.scholarpedia.org/article/Three_body_problem)
+* [Paper from St. Petersburg State University on n-body systems](http://butikov.faculty.ifmo.ru/ManyBody.pdf)
