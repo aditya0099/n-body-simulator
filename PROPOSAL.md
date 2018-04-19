@@ -11,7 +11,7 @@ The goal of this project is to create an application that can model and visulaiz
 * Mass of each body
 * Initial position of each body in 3D space
 * Initial velocity of each body
-* Laws governing the motion of the bodies:
+* Laws governing the motion of the bodies (if time permits):
     * Gravitational constant (`G`)
     * Newton's inverse square law
     * Kepler's laws of planetary motion
@@ -26,7 +26,7 @@ This project will make use of the following libraries:
 1. [of3d](http://openframeworks.cc/documentation/3d/) - this library will be used to visualize the simulation by generating,  moving and resizing spheres to represent the bodies, their motion and their relative positions.
 1. [OpenGL](http://openframeworks.cc/documentation/gl/) - this library will be used at a later stage for more advanced graphics such as adding textures to the bodies and rendering a more dynamic background.
 1. [ofxGui](http://openframeworks.cc/documentation/ofxGui/) - this library will be used to take user input regarding the initial states of the simulation in a user friendly way. It will also be used during the simulation to pause and step through the frames and to manipulate the point of view in the simulation.
-1. [ofxGui](http://openframeworks.cc/documentation/ofxXmlSettings/) - this library will be used to save and load user input in a more efficient way. It will also be used to store the state of a certain simulation for reloading.
+1. [ofxXmlSettings](http://openframeworks.cc/documentation/ofxXmlSettings/) - this library will be used to save and load user input in a more efficient way. It will also be used to store the state of a certain simulation for reloading (if time permits).
 
 ## Further Reading
 For more information regarding the N-Body problem, the reader may consult the following resources:
