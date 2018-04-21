@@ -28,13 +28,6 @@ void FewBodyEngine::update() {
 
 }
 
-vector<ofVec3f> FewBodyEngine::GetBodyPositions() const {
-	vector<ofVec3f> positions;
-	for (Body* m : bodies) {
-		
-	}
-}
-
 /**
  * Calculates the net gravitational force on a particular body exerted
  * by all other bodies in the simulation at a particular time instant.
@@ -66,7 +59,7 @@ ofVec3f FewBodyEngine::CalculateForce(Body const * body) const {
 ofVec3f FewBodyEngine::CalculateGravity(Body const* m1, Body const* m2) const {
 	// Optimization; a body cannot exert a force on itself
 	if (m1 == m2) {
-		return;
+		return ofVec3f(0, 0, 0);
 	}
 
 	double dist_sq = m1->position.squareDistance(m2->position);

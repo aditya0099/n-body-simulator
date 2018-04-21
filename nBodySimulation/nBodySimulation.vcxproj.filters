@@ -117,7 +117,4 @@
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="icon.rc" />
-  </ItemGroup>
 </Project>

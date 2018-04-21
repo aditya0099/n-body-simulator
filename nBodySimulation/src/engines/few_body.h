@@ -8,14 +8,12 @@
 using std::vector;
 
 
-class FewBodyEngine : PhysicsEngine {
+class FewBodyEngine : public PhysicsEngine {
 public:
 	FewBodyEngine(double interval);
 	~FewBodyEngine();
 
 	void update();
-
-	vector<ofVec3f> GetBodyPositions() const;
 private:
 
 	ofVec3f CalculateForce(Body const * body) const;

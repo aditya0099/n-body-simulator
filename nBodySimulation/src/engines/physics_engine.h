@@ -10,18 +10,19 @@ public:
 	PhysicsEngine();
 	~PhysicsEngine();
 
-	void AddBody(const vector<double>& pos, const vector<double>& v, double m);
+	void AddBody(const ofVec3f pos, const ofVec3f v, double m);
 	void AddBody(double x, double y, double z,
 		double v_x, double v_y, double v_z,
 		double m);
+
+	vector<ofVec3f> GetBodyPositions() const;
 
 	virtual void update() = 0;
 
 protected:
 	struct Body {
-		Body(const vector<double>& pos, const vector<double>& v, double m)
-			: position(pos.at(0), pos.at(1), pos.at(2)), mass(m),
-			velocity(v.at(0), v.at(1), v.at(2)) { }
+		Body(const ofVec3f pos, const ofVec3f v, double m)
+			: position(pos), velocity(v), mass(m) { }
 
 		Body(double x, double y, double z,
 			double v_x, double v_y, double v_z,
