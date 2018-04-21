@@ -1,4 +1,0 @@
-﻿  few_body_test.cpp
-c:\users\aditya bhansali\onedrive\school\cs 126\mps\final-project-aditya0099\nbodysimulation\src\engines\physics_engine.h(3): fatal error C1083: Cannot open include file: 'ofVec3f.h': No such file or directory
-  catchmain.cpp
-  Generating Code...

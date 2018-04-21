@@ -1,10 +1,15 @@
 #include "few_body.h"
 #include <cmath>
 
-
+/**
+ * Constructor; sets the time interval
+ */
 FewBodyEngine::FewBodyEngine(double interval) 
 	: PhysicsEngine(), time_interval(interval), time(0) { }
 
+/**
+ * Destructor, deletes all the bodies
+ */
 FewBodyEngine::~FewBodyEngine() {
 	for (Body*& body : bodies) {
 		delete body;
@@ -12,6 +17,9 @@ FewBodyEngine::~FewBodyEngine() {
 	}
 }
 
+/**
+ * Main loop, updates the positions of all the bodies
+ */
 void FewBodyEngine::update() {
 	time += time_interval;
 	

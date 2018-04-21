@@ -6,9 +6,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nBodySimulation", "nBodySim
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openframeworksLib", "..\..\..\..\..\..\Documents\Visual Studio 2017\OF\of_v0.9.8_vs_release\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj", "{5837595D-ACA9-485C-8E76-729040CE4B0B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests\tests.vcxproj", "{5162ECE9-B29C-4F5B-83D2-108B5976892F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nBodySimulationTests", "..\nBodySimulationTests\nBodySimulationTests.vcxproj", "{78CDAF63-C912-4077-BA1B-4732366074F2}"
 	ProjectSection(ProjectDependencies) = postProject
-		{5837595D-ACA9-485C-8E76-729040CE4B0B} = {5837595D-ACA9-485C-8E76-729040CE4B0B}
 		{7FD42DF7-442E-479A-BA76-D0022F99702A} = {7FD42DF7-442E-479A-BA76-D0022F99702A}
 	EndProjectSection
 EndProject
@@ -36,19 +35,19 @@ Global
 		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Release|Win32.Build.0 = Release|Win32
 		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Release|x64.ActiveCfg = Release|x64
 		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Release|x64.Build.0 = Release|x64
-		{5162ECE9-B29C-4F5B-83D2-108B5976892F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5162ECE9-B29C-4F5B-83D2-108B5976892F}.Debug|Win32.Build.0 = Debug|Win32
-		{5162ECE9-B29C-4F5B-83D2-108B5976892F}.Debug|x64.ActiveCfg = Debug|x64
-		{5162ECE9-B29C-4F5B-83D2-108B5976892F}.Debug|x64.Build.0 = Debug|x64
-		{5162ECE9-B29C-4F5B-83D2-108B5976892F}.Release|Win32.ActiveCfg = Release|Win32
-		{5162ECE9-B29C-4F5B-83D2-108B5976892F}.Release|Win32.Build.0 = Release|Win32
-		{5162ECE9-B29C-4F5B-83D2-108B5976892F}.Release|x64.ActiveCfg = Release|x64
-		{5162ECE9-B29C-4F5B-83D2-108B5976892F}.Release|x64.Build.0 = Release|x64
+		{78CDAF63-C912-4077-BA1B-4732366074F2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{78CDAF63-C912-4077-BA1B-4732366074F2}.Debug|Win32.Build.0 = Debug|Win32
+		{78CDAF63-C912-4077-BA1B-4732366074F2}.Debug|x64.ActiveCfg = Debug|x64
+		{78CDAF63-C912-4077-BA1B-4732366074F2}.Debug|x64.Build.0 = Debug|x64
+		{78CDAF63-C912-4077-BA1B-4732366074F2}.Release|Win32.ActiveCfg = Release|Win32
+		{78CDAF63-C912-4077-BA1B-4732366074F2}.Release|Win32.Build.0 = Release|Win32
+		{78CDAF63-C912-4077-BA1B-4732366074F2}.Release|x64.ActiveCfg = Release|x64
+		{78CDAF63-C912-4077-BA1B-4732366074F2}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D609C687-A201-43DE-B674-8E595CBBD473}
+		SolutionGuid = {5FBF06DD-9988-4E7D-BB3D-9BFA0CB67CF0}
 	EndGlobalSection
 EndGlobal

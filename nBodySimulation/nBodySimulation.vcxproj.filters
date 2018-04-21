@@ -44,10 +44,10 @@
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClCompile>
     <ClCompile Include="src\engines\few_body.cpp">
-      <Filter>src</Filter>
+      <Filter>src\engines</Filter>
     </ClCompile>
     <ClCompile Include="src\engines\physics_engine.cpp">
-      <Filter>src</Filter>
+      <Filter>src\engines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +71,9 @@
     </Filter>
     <Filter Include="addons\ofxXmlSettings\libs">
       <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\engines">
+      <UniqueIdentifier>{6b7884ec-43fa-4cc9-baeb-6faff6f92335}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,10 +114,13 @@
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClInclude>
     <ClInclude Include="src\engines\few_body.h">
-      <Filter>src</Filter>
+      <Filter>src\engines</Filter>
     </ClInclude>
     <ClInclude Include="src\engines\physics_engine.h">
-      <Filter>src</Filter>
+      <Filter>src\engines</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
   </ItemGroup>
 </Project>
