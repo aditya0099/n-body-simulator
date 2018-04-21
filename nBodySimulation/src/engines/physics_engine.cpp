@@ -2,7 +2,7 @@
 
 
 
-PhysicsEngine::PhysicsEngine() { }
+PhysicsEngine::PhysicsEngine(double interval) : time_interval(interval), time(0) { }
 
 
 PhysicsEngine::~PhysicsEngine() {

@@ -2,12 +2,11 @@
 
 #include "ofVec3f.h"
 
-class PhysicsEngine
-{
+class PhysicsEngine {
 public:
 	const double kG = 0.000000000066742;
 
-	PhysicsEngine();
+	PhysicsEngine(double interval);
 	~PhysicsEngine();
 
 	void AddBody(const ofVec3f pos, const ofVec3f v, double m);
@@ -36,5 +35,7 @@ protected:
 
 	int bodies_count;
 	vector<Body*> bodies;
+	double time_interval;
+	double time;
 };
 

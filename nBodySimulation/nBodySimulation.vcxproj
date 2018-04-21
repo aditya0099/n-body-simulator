@@ -172,7 +172,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\engines\few_body.cpp" />
+    <ClCompile Include="src\engines\many_body.cpp" />
     <ClCompile Include="src\engines\physics_engine.cpp" />
+    <ClInclude Include="src\kd_tree\point.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <FileType>CppHeader</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Documents\Visual Studio 2017\OF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxBaseGui.cpp" />
@@ -190,7 +198,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engines\few_body.h" />
+    <ClInclude Include="src\engines\many_body.h" />
     <ClInclude Include="src\engines\physics_engine.h" />
+    <ClInclude Include="src\kd_tree\kdtree.h" />
+    <ClInclude Include="src\kd_tree\kdtree.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="src\kd_tree\point.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\..\..\..\Documents\Visual Studio 2017\OF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxBaseGui.h" />
     <ClInclude Include="..\..\..\..\..\..\Documents\Visual Studio 2017\OF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxButton.h" />

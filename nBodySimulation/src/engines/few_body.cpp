@@ -5,7 +5,7 @@
  * Constructor; sets the time interval
  */
 FewBodyEngine::FewBodyEngine(double interval) 
-	: PhysicsEngine(), time_interval(interval), time(0) { }
+	: PhysicsEngine(interval) { }
 
 /**
  * Destructor, deletes all the bodies
@@ -50,7 +50,7 @@ ofVec3f FewBodyEngine::CalculateForce(Body const * body) const {
 	for (Body* m : bodies) {
 		net_force += CalculateGravity(m, body);
 	}
-	
+
 	return net_force;
 }
 
@@ -86,5 +86,5 @@ ofVec3f FewBodyEngine::CalculateVelocity(Body const* body, ofVec3f force) const 
 }
 
 ofVec3f FewBodyEngine::CalculatePosition(Body const* body) const {
-	return body->position + body->velocity*time_interval;
+	return body->position + body->velocity * (float)time_interval;
 }

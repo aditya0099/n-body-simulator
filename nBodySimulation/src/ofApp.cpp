@@ -1,4 +1,6 @@
 #include "ofApp.h"
+#include "engines\few_body.h"
+#include "engines\many_body.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){

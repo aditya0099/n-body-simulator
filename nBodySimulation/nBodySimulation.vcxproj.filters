@@ -49,6 +49,7 @@
     <ClCompile Include="src\engines\physics_engine.cpp">
       <Filter>src\engines</Filter>
     </ClCompile>
+    <ClCompile Include="src\engines\many_body.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -119,6 +120,11 @@
     <ClInclude Include="src\engines\physics_engine.h">
       <Filter>src\engines</Filter>
     </ClInclude>
+    <ClInclude Include="src\kd_tree\kdtree.h" />
+    <ClInclude Include="src\kd_tree\point.h" />
+    <ClInclude Include="src\engines\many_body.h" />
+    <ClInclude Include="src\kd_tree\kdtree.cpp" />
+    <ClInclude Include="src\kd_tree\point.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
