@@ -50,6 +50,7 @@
       <Filter>src\engines</Filter>
     </ClCompile>
     <ClCompile Include="src\engines\many_body.cpp" />
+    <ClCompile Include="src\kd_tree\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -125,6 +126,7 @@
     <ClInclude Include="src\engines\many_body.h" />
     <ClInclude Include="src\kd_tree\kdtree.cpp" />
     <ClInclude Include="src\kd_tree\point.cpp" />
+    <ClInclude Include="src\kd_tree\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
