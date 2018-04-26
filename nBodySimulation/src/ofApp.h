@@ -24,8 +24,10 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 private:
-	void DrawSetupScreen();
+	void DrawSetupBodies();
+	void SetupGui();
 	void AddBody();
+	void DrawGui();
 
 	enum ProgramState {
 		SETUP,
@@ -34,15 +36,21 @@ private:
 	};
 
 	ProgramState state;
-	PhysicsEngine* simulation;
+	
+	PhysicsEngine *simulation;
+	int body_count;
 
 	int screen_size = 1000;
 
 	ofxPanel setup_gui;
-	ofxVec3Slider position;
-	ofxVec3Slider velocity;
-	ofxSlider<double> mass;
-	ofxColorSlider body_color;
-	ofxButton submit;
+	ofxVec3Slider position_slider;
+	ofxVec3Slider velocity_slider;
+	ofxSlider<double> mass_slider;
+	ofxColorSlider color_slider;
+	ofxButton add_button;
 
+	vector<ofSpherePrimitive> body_spheres;
+	vector<ofColor> body_color;
+
+	ofLight light;
 };

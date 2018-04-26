@@ -5,23 +5,13 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	state = SETUP;
-	simulation = nullptr;
+	simulation = new FewBodyEngine(0.01);
+	body_count = 0;
+	ofSetBackgroundColor(20, 20, 20);
 
-	submit.addListener(this, &ofApp::AddBody);
-
-	setup_gui.setup();
-	setup_gui.add(position.setup("position", 
-		ofVec3f(0, 0, 0),
-		ofVec3f(-screen_size*.5, -screen_size*.5, -screen_size*.5),
-		ofVec3f(screen_size*.5, screen_size*.5, screen_size*.5)));
-	setup_gui.add(velocity.setup("position",
-		ofVec3f(0, 0, 0),
-		ofVec3f(-screen_size*.25, -screen_size*.25, -screen_size*.25),
-		ofVec3f(screen_size*.25, screen_size*.25, screen_size*.25)));
-	setup_gui.add(mass.setup("mass", 0, 0, 10000000000000000000000000000000.0));
-	setup_gui.add(body_color.setup("color", ofColor(50, 100, 150), 
-		ofColor(0, 0, 0), ofColor(255, 255, 255)));
-	setup_gui.add(submit.setup("submit"));
+	SetupGui();
+	light.setup();
+	light.setPointLight();
 }
 
 //--------------------------------------------------------------
@@ -42,7 +32,9 @@ void ofApp::update() {
 void ofApp::draw() {
 	switch (state) {
 	case SETUP:
-		setup_gui.draw();
+		light.enable();
+		DrawSetupBodies();
+		DrawGui();
 		break;
 	case RUNNING:
 		break;
@@ -113,4 +105,77 @@ void ofApp::exit() {
 }
 
 void ofApp::AddBody() {
+	// Get the data from the sliders
+	ofVec3f position = position_slider;
+	ofVec3f velocity = velocity_slider;
+	double mass = mass_slider;
+	ofColor color = color_slider;
+
+	// Add the body to a simulation
+	simulation->AddBody(position, velocity, mass);
+
+	// Map the position of the body in the vector to a specific color
+	body_color.push_back(color);
+
+	// Create a new sphere
+	ofSpherePrimitive sphere;
+	sphere.setRadius(75);
+	body_spheres.push_back(sphere);
+
+	body_count++;
+}
+
+void ofApp::SetupGui() {
+	add_button.addListener(this, &ofApp::AddBody);
+
+	setup_gui.setup("Bodies", "../data/setup.xml");
+
+	setup_gui.add(position_slider.setup("position",
+		ofVec3f(0, 0, 0),
+		ofVec3f(-screen_size*.5, -screen_size*.5, -screen_size*.5),
+		ofVec3f(screen_size*.5, screen_size*.5, screen_size*.5)));
+
+	setup_gui.add(velocity_slider.setup("velocity",
+		ofVec3f(0, 0, 0),
+		ofVec3f(-screen_size*.25, -screen_size*.25, -screen_size*.25),
+		ofVec3f(screen_size*.25, screen_size*.25, screen_size*.25)));
+
+	setup_gui.add(mass_slider.setup("mass", 0, 0, 10000000000000000000000000000000.0));
+
+	setup_gui.add(color_slider.setup("color", ofColor(50, 100, 150),
+		ofColor(0, 0, 0), ofColor(255, 255, 255)));
+
+	setup_gui.add(add_button.setup("add"));
+}
+
+void ofApp::DrawSetupBodies() {
+	double offset = (double)ofGetWidth() / ((double)body_spheres.size() + 1);
+	double x = offset;
+	for (int i = 0; i < body_spheres.size(); i++) {
+		body_spheres[i].setPosition(x, ofGetHeight()*.6, 0);
+		x += offset;
+
+		body_spheres[i].rotate(ofGetElapsedTimef() * 75, 0.15, 1.0, 0.0);
+
+		ofPushStyle();
+		ofSetColor(body_color[i]);
+		body_spheres[i].drawWireframe();
+		ofPopStyle();
+	}
+}
+
+void ofApp::DrawGui() {
+	switch (state) {
+	case SETUP:
+		glDisable(GL_LIGHTING);
+		glDisable(GL_DEPTH_TEST);
+		position_slider.draw();
+		velocity_slider.draw();
+		mass_slider.draw();
+		color_slider.draw();
+		add_button.draw();
+		setup_gui.draw();
+		glEnable(GL_LIGHTING);
+		glEnable(GL_DEPTH_TEST);
+	}
 }
