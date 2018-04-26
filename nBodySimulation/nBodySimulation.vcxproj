@@ -171,9 +171,11 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="gui.cpp" />
     <ClCompile Include="src\engines\few_body.cpp" />
     <ClCompile Include="src\engines\many_body.cpp" />
     <ClCompile Include="src\engines\physics_engine.cpp" />
+    <ClInclude Include="gui.h" />
     <ClInclude Include="src\kd_tree\point.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <FileType>CppHeader</FileType>

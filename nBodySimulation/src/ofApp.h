@@ -25,9 +25,11 @@ public:
 	void gotMessage(ofMessage msg);
 private:
 	void DrawSetupBodies();
+	void DrawSimulationBodies();
 	void SetupGui();
 	void AddBody();
 	void DrawGui();
+	void RunSimulation();
 
 	enum ProgramState {
 		SETUP,
@@ -49,8 +51,12 @@ private:
 	ofxColorSlider color_slider;
 	ofxButton add_button;
 
+	ofxPanel run_gui;
+	ofxButton run_button;
+
 	vector<ofSpherePrimitive> body_spheres;
 	vector<ofColor> body_color;
 
 	ofLight light;
+	ofEasyCam camera;
 };

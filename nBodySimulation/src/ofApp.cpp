@@ -12,14 +12,26 @@ void ofApp::setup() {
 	SetupGui();
 	light.setup();
 	light.setPointLight();
+
+	camera.setDistance(100);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
+	static int i = 0;
 	switch (state) {
 	case SETUP:
 		break;
-	case RUNNING:
+	case RUNNING: {
+		++i;
+		simulation->update();
+		if (i % 100 == 0) {
+			auto positions = simulation->GetBodyPositions();
+			for (auto i : positions) {
+				cout << i << endl;
+			}
+		}
+		}
 		break;
 	case PAUSED:
 		break;
@@ -37,6 +49,9 @@ void ofApp::draw() {
 		DrawGui();
 		break;
 	case RUNNING:
+		camera.begin();
+		DrawSimulationBodies();
+		camera.end();
 		break;
 	case PAUSED:
 		break;
@@ -140,12 +155,19 @@ void ofApp::SetupGui() {
 		ofVec3f(-screen_size*.25, -screen_size*.25, -screen_size*.25),
 		ofVec3f(screen_size*.25, screen_size*.25, screen_size*.25)));
 
-	setup_gui.add(mass_slider.setup("mass", 0, 0, 10000000000000000000000000000000.0));
+	setup_gui.add(mass_slider.setup("mass", 10, 1, 1000000));
 
 	setup_gui.add(color_slider.setup("color", ofColor(50, 100, 150),
 		ofColor(0, 0, 0), ofColor(255, 255, 255)));
 
 	setup_gui.add(add_button.setup("add"));
+
+
+	run_button.addListener(this, &ofApp::RunSimulation);
+
+	run_gui.setup("run");
+	run_gui.add(run_button.setup("start simulation"));
+	run_gui.setPosition(10, setup_gui.getHeight()*1.1);
 }
 
 void ofApp::DrawSetupBodies() {
@@ -169,13 +191,36 @@ void ofApp::DrawGui() {
 	case SETUP:
 		glDisable(GL_LIGHTING);
 		glDisable(GL_DEPTH_TEST);
+
 		position_slider.draw();
 		velocity_slider.draw();
 		mass_slider.draw();
 		color_slider.draw();
 		add_button.draw();
 		setup_gui.draw();
+
+		run_button.draw();
+		run_gui.draw();
+
 		glEnable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
+	}
+}
+
+void ofApp::RunSimulation() {
+	state = RUNNING;
+}
+
+void ofApp::DrawSimulationBodies() {
+	vector<ofVec3f> positions = simulation->GetBodyPositions();
+	for (int i = 0; i < body_spheres.size(); i++) {
+		body_spheres[i].setPosition(positions[i]);
+
+		//body_spheres[i].rotate(ofGetElapsedTimef() * 75, 0.15, 1.0, 0.0);
+
+		ofPushStyle();
+		ofSetColor(body_color[i]);
+		body_spheres[i].drawWireframe();
+		ofPopStyle();
 	}
 }
