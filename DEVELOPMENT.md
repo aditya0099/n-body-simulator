@@ -25,3 +25,4 @@ Instead of implementing two different physics engines, I have decided to add a s
     * Understanding how to us the of3dPrimitives
     * Figuring out how the ofEasyCamera works
 * Structuring and logically splitting the code between the update and draw loops.
+* Floating point underflow because ofVector uses floats and my code used doubles
