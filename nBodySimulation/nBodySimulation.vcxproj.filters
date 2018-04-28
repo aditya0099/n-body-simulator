@@ -49,11 +49,13 @@
     <ClCompile Include="src\engines\physics_engine.cpp">
       <Filter>src\engines</Filter>
     </ClCompile>
-    <ClCompile Include="src\kd_tree\utils.cpp" />
     <ClCompile Include="src\engines\many_body.cpp">
       <Filter>src\engines</Filter>
     </ClCompile>
     <ClCompile Include="gui.cpp" />
+    <ClCompile Include="src\kd_tree\utils.cpp">
+      <Filter>src\kd_tree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -82,6 +84,9 @@
     </Filter>
     <Filter Include="data">
       <UniqueIdentifier>{d71bea5a-c222-402d-a134-ceb6c122754e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\kd_tree">
+      <UniqueIdentifier>{ba7dca0e-79c2-4559-9974-f40aac6524fa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -127,15 +132,25 @@
     <ClInclude Include="src\engines\physics_engine.h">
       <Filter>src\engines</Filter>
     </ClInclude>
-    <ClInclude Include="src\kd_tree\kdtree.h" />
-    <ClInclude Include="src\kd_tree\point.h" />
-    <ClInclude Include="src\kd_tree\kdtree.cpp" />
-    <ClInclude Include="src\kd_tree\point.cpp" />
-    <ClInclude Include="src\kd_tree\utils.h" />
     <ClInclude Include="src\engines\many_body.h">
       <Filter>src\engines</Filter>
     </ClInclude>
     <ClInclude Include="gui.h" />
+    <ClInclude Include="src\kd_tree\kdtree.cpp">
+      <Filter>src\kd_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kd_tree\kdtree.h">
+      <Filter>src\kd_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kd_tree\point.cpp">
+      <Filter>src\kd_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kd_tree\point.h">
+      <Filter>src\kd_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kd_tree\utils.h">
+      <Filter>src\kd_tree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

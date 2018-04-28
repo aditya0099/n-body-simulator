@@ -5,7 +5,11 @@
  * Constructor; sets the time interval
  */
 FewBodyEngine::FewBodyEngine(double interval) 
-	: PhysicsEngine(interval) { }
+	: PhysicsEngine(interval), kd_tree(nullptr) { }
+
+FewBodyEngine::~FewBodyEngine() {
+	delete kd_tree;
+}
 
 /**
  * Main loop, updates the positions of all the bodies
@@ -69,12 +73,31 @@ ofVec3f FewBodyEngine::CalculateGravity(const Body &m1, const Body &m2) const {
 	return (m1.position - m2.position).scale(magnitude);
 }
 
-ofVec3f FewBodyEngine::CalculateVelocity(const Body &body, ofVec3f force) const {
+/**
+ * Calculates the new velocity of a body given a force.
+ *
+ * @param body the body being considered
+ * @param force the force acting on the body
+ * @return the new velocity of the body
+ */
+ofVec3f FewBodyEngine::CalculateVelocity(const Body &body, const ofVec3f force) const {
 	ofVec3f acceleration = force / body.mass;
-
 	return body.velocity + (acceleration * time_interval);
 }
 
+/**
+* Calculates the new position of a body using its velocity.
+*
+* @param body the body being considered
+* @return the new position of the body
+*/
 ofVec3f FewBodyEngine::CalculatePosition(const Body &body) const {
 	return body.position + body.velocity * (float)time_interval;
+}
+
+/**
+ * Handles inelstic collisions of the bodies.
+ */
+void FewBodyEngine::HandleCollisions() {
+	//TODO: implement using KDTree
 }

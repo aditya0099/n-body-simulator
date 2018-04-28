@@ -4,31 +4,42 @@
 
 PhysicsEngine::PhysicsEngine(double interval) : time_interval(interval), time(0) { }
 
-
-PhysicsEngine::~PhysicsEngine() {
-	// TODO: Rule of 5
-}
-
 /**
  * Adds a body to the simulation
  * @param pos the initial position of the body
  * @param v the initial velocity
  * @param m the mass of the boject
  */
-void PhysicsEngine::AddBody(const ofVec3f pos, const ofVec3f v, double m) {
-	Body body(pos, v, m);
+void PhysicsEngine::AddBody(const ofVec3f pos, const ofVec3f v, double m, double r) {
+	Body body;
+	body.mass = m;
+	body.position = pos;
+	body.radius = r;
 	bodies.push_back(body);
 }
 
 /**
-* Adds a body to the simulation
-* @param z,y,z the initial position of the body
-* @param v_x,v_y,v_z the initial velocity
-* @param m the mass of the boject
-*/
-void PhysicsEngine::AddBody(double x, double y, double z, double v_x, double v_y, double v_z, double m) {
-	Body body(x, y, z, v_x, v_y, v_z, m);
+ * Adds a body to the simulation
+ *
+ * @param x, y, z the initial position of the body
+ * @param v_x, v_y, v_z the initial velocity
+ * @param m the mass of the boject
+ */
+void PhysicsEngine::AddBody(double x,   double y,   double z,
+							double v_x, double v_y, double v_z,
+							double m, double r) {
+	Body body;
+	body.position = ofVec3f(x, y, z);
+	body.velocity = ofVec3f(v_x, v_y, v_z);
+	body.mass = m;
+	body.radius = r;
 	bodies.push_back(body);
+}
+
+void PhysicsEngine::RemovePreviousBody() {
+	if (!bodies.empty()) {
+		bodies.pop_back();
+	}
 }
 
 /**
@@ -43,6 +54,5 @@ vector<ofVec3f> PhysicsEngine::GetBodyPositions() const {
 
 	return positions;
 }
-
 
 

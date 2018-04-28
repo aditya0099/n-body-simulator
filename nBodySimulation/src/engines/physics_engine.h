@@ -4,29 +4,26 @@
 
 class PhysicsEngine {
 public:
+	static constexpr double kRadius = 100.0;
+	static constexpr double kG = 0.000000000066742;
+
+
 	struct Body {
-		Body(const ofVec3f pos, const ofVec3f v, double m)
-			: position(pos), velocity(v), mass(m) { }
-
-		Body(double x, double y, double z,
-			double v_x, double v_y, double v_z,
-			double m)
-			: position(z, y, z), velocity(v_x, v_y, v_z), mass(m) { }
-
 		ofVec3f position;
 		ofVec3f velocity;
 		double mass;
+		double radius;
 	};
 
-	const double kG = 0.000000000066742;
 
 	PhysicsEngine(double interval);
-	~PhysicsEngine();
 
-	void AddBody(const ofVec3f pos, const ofVec3f v, double m);
+	void AddBody(const ofVec3f pos, const ofVec3f v, double  m, double r = kRadius);
 	void AddBody(double x, double y, double z,
 		double v_x, double v_y, double v_z,
-		double m);
+		double m, double r = kRadius);
+
+	void RemovePreviousBody();
 
 	vector<ofVec3f> GetBodyPositions() const;
 
