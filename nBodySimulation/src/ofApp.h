@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "engines\physics_engine.h"
+#include "sphere.h"
 
 class ofApp : public ofBaseApp {
 
@@ -13,16 +14,6 @@ public:
 	void exit();
 
 	void keyPressed(int key);
-	void keyReleased(int key);
-	void mouseMoved(int x, int y );
-	void mouseDragged(int x, int y, int button);
-	void mousePressed(int x, int y, int button);
-	void mouseReleased(int x, int y, int button);
-	void mouseEntered(int x, int y);
-	void mouseExited(int x, int y);
-	void windowResized(int w, int h);
-	void dragEvent(ofDragInfo dragInfo);
-	void gotMessage(ofMessage msg);
 private:
 	void DrawSetupBodies();
 	void DrawSimulationBodies();
@@ -34,7 +25,8 @@ private:
 	void RunSimulation();
 	void Step();
 	void SetupLights();
-	void Reset();
+	void Return();
+	void ToggleCollision();
 
 	enum ProgramState {
 		SETUP,
@@ -57,6 +49,9 @@ private:
 	ofxButton add_button;
 	ofxButton remove_button;
 
+	ofxPanel collision_gui;
+	ofxToggle elastic_button;
+
 	ofxPanel run_gui;
 	ofxButton run_button;
 
@@ -66,9 +61,7 @@ private:
 	ofxButton step_button;
 	ofxSlider<double> step_slider;
 
-	vector<ofSpherePrimitive> body_spheres;
-	vector<ofColor> body_color;
-
+	vector<ColoredSphere> body_spheres;
 	ofLight light1;
 	ofLight light2;
 	ofLight light3;

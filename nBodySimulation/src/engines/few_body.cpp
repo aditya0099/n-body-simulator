@@ -1,11 +1,13 @@
 #include "few_body.h"
+
+#include "ofVec3f.h"
 #include <cmath>
 
 /**
  * Constructor; sets the time interval
  */
 FewBodyEngine::FewBodyEngine(double interval) 
-	: PhysicsEngine(interval), kd_tree(nullptr) { }
+	: PhysicsEngine(interval), elastic_collisions(true) { }
 
 FewBodyEngine::~FewBodyEngine() {
 	delete kd_tree;
@@ -28,6 +30,11 @@ void FewBodyEngine::update() {
 		m.position = CalculatePosition(m);
 	}
 
+	HandleCollisions();
+}
+
+void FewBodyEngine::SetElasticCollisions(bool elastic) {
+	elastic_collisions = elastic;
 }
 
 /**
@@ -96,8 +103,45 @@ ofVec3f FewBodyEngine::CalculatePosition(const Body &body) const {
 }
 
 /**
- * Handles inelstic collisions of the bodies.
+ * Handles collisions of the bodies elasitcally or inelastically.
  */
 void FewBodyEngine::HandleCollisions() {
-	//TODO: implement using KDTree
+	for (int i = 0; i < body_count; i++) {
+		for (int j = 0; j < body_count; j++) {
+			if (Intersect(i, j)	&& i != j) {
+				Collide(i, j);
+				return;
+			}
+		}
+	}
+}
+
+bool FewBodyEngine::Intersect(int idx_1, int idx_2) {
+	double distance = bodies[idx_1].position.squareDistance(bodies[idx_2].position);
+	double sum_radii = std::pow(CalculateRadius(bodies[idx_1].mass) 
+							  + CalculateRadius(bodies[idx_2].mass), 2);
+	
+	return distance <= sum_radii;
+}
+
+void FewBodyEngine::Collide(int idx_1, int idx_2) {
+	Body &m1 = bodies[idx_1];
+	Body &m2 = bodies[idx_2];
+
+	if (elastic_collisions) {
+		ofVec3f v1 = m1.velocity - (2 * m2.mass / (m1.mass + m2.mass)) * (m1.velocity - m2.velocity).dot(m1.position - m2.position) / (m1.position - m2.position).lengthSquared() * (m1.position - m2.position);
+		ofVec3f v2 = m2.velocity - (2 * m1.mass / (m1.mass + m2.mass)) * (m2.velocity - m1.velocity).dot(m2.position - m1.position) / (m2.position - m1.position).lengthSquared() * (m2.position - m1.position);
+
+		m1.velocity = v1;
+		m2.velocity = v2;
+	} else {
+		m1.velocity = m1.mass / (m1.mass * m2.mass) * m1.velocity
+					+ m2.mass / (m1.mass * m2.mass) * m2.velocity;
+		m1.color = m1.color + m2.color;
+		m1.mass = m1.mass + m2.mass;
+		m1.position = (m1.position + m2.position) / 2;
+
+		bodies.erase(bodies.begin() + idx_2);
+		body_count--;
+	}
 }

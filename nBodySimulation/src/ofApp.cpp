@@ -1,20 +1,20 @@
 #include "ofApp.h"
 #include "engines\few_body.h"
+#include "sphere.h"
 
 /**
  * Called at the start of the application. Sets up the
  * physics engine, GUI, camera and lights.
  */
 void ofApp::setup() {
+	ofSetFullscreen(true);
 	state = SETUP;
-	simulation = new FewBodyEngine(0.01);
-	body_count = 0;
-	ofSetBackgroundColor(20, 20, 20);
+	simulation = new FewBodyEngine(0.02);
 
 	SetupGui();
-	
 	SetupLights();
 
+	ofSetBackgroundColor(20, 20, 20);
 	camera.setDistance(500);
 }
 
@@ -58,21 +58,18 @@ void ofApp::draw() {
 		DrawSetupBodies();
 		break;
 
-	case RUNNING: case PAUSED:
+	case RUNNING:
+	case PAUSED:
 		camera.begin();
 		DrawSimulationBodies();
 		camera.end();
 		break;
 	}
 
+	// Disable lighting before drawing GUI
 	ofDisableLighting();
 	ofDisableDepthTest();
 	DrawGui();
-}
-
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-	// TODO: Keyboard Shortcuts
 }
 
 /**
@@ -93,17 +90,17 @@ void ofApp::AddBody() {
 	ofColor color = color_slider;
 
 	// Add the body to a simulation
-	simulation->AddBody(position, velocity, mass);
-
-	// Map the position of the body in the vector to a specific color
-	body_color.push_back(color);
+	simulation->AddBody(position, velocity, mass, color);
 
 	// Create a new sphere
-	ofSpherePrimitive sphere;
-	sphere.setRadius(75);
-	body_spheres.push_back(sphere);
+	ColoredSphere sp;
+	sp.sphere.setRadius(PhysicsEngine::CalculateRadius(mass));
+	sp.color.set(color);
 
-	body_count++;
+	body_spheres.push_back(sp);
+
+	// Randomize the color for the next body
+	color_slider = ofColor(rand() % 255, rand() % 255, rand() % 255);
 }
 
 /**
@@ -111,50 +108,47 @@ void ofApp::AddBody() {
  */
 void ofApp::RemovePreviousBody() {
 	simulation->RemovePreviousBody();
-	body_color.pop_back();
-	body_spheres.pop_back();
+	if (!body_spheres.empty()) {
+		body_spheres.pop_back();
+	}
 }
 
-// TODO: clean up this function
 /**
  * Helper function for setting up the GUI at the start of the application.
  * Initilaizes all buttons and sliders to their default values and locations.
  */
 void ofApp::SetupGui() {
-	// SETUP GUI
+	// SETUP
 	add_button.addListener(this, &ofApp::AddBody);
 	remove_button.addListener(this, &ofApp::RemovePreviousBody);
 
 	setup_gui.setup("bodies", "../data/setup.xml");
-
 	setup_gui.add(position_slider.setup("position",
 		ofVec3f(0, 0, 0),
 		ofVec3f(-screen_size*.5, -screen_size*.5, -screen_size*.5),
 		ofVec3f(screen_size*.5, screen_size*.5, screen_size*.5)));
-
 	setup_gui.add(velocity_slider.setup("velocity",
-		ofVec3f(0, 0, 0), ofVec3f(-25, -25, -25), ofVec3f(25, 25, 25)));
-
+		ofVec3f(0, 0, 0), ofVec3f(-10, -10, -10), ofVec3f(10, 10, 10)));
 	setup_gui.add(mass_slider.setup("mass", 10, 1, 100));
-
-	setup_gui.add(color_slider.setup("color", ofColor(50, 100, 150),
+	setup_gui.add(color_slider.setup("color", 
+		ofColor(rand() % 255, rand() % 255, rand() % 255),
 		ofColor(0, 0, 0), ofColor(255, 255, 255)));
-
 	setup_gui.add(add_button.setup("add"));
 	setup_gui.add(remove_button.setup("remove"));
 
-	// RUN GUI
+
+	// RUNNING
 	run_button.addListener(this, &ofApp::RunSimulation);
 
 	run_gui.setup("run");
+	run_gui.add(elastic_button.setup("elastic collisions", false));
 	run_gui.add(run_button.setup("start simulation"));
-	run_gui.setPosition(10, setup_gui.getHeight() + 20);
+	run_gui.setPosition(setup_gui.getWidth() + 20, 10);
 
-
+	// PAUSED
+	exit_button.addListener(this, &ofApp::Return);
 	step_button.addListener(this, &ofApp::Step);
-	exit_button.addListener(this, &ofApp::Reset);
 
-	// PAUSE GUI
 	pause_gui.setup("pause");
 	pause_gui.add(pause_button.setup("pause", false));
 	pause_gui.add(exit_button.setup("exit", false));
@@ -167,17 +161,46 @@ void ofApp::SetupGui() {
 }
 
 /**
- * Resets a running simulation to its setup state.
+ * Reverts a running simulation to its setup state.
  */
-void ofApp::Reset() {
-	delete simulation;
-	simulation = new FewBodyEngine(0.01);
-
-	body_color.clear();
-	body_spheres.clear();
-
+void ofApp::Return() {
+	// TODO: load from xml
 	state = SETUP;
 	ofSetBackgroundColor(20, 20, 20);
+}
+
+void ofApp::keyPressed(int key) {
+	switch (key) {
+	case OF_KEY_RETURN:
+		if (state == SETUP) {
+			AddBody();
+		}
+		break;
+
+	case OF_KEY_BACKSPACE:
+		if (state == SETUP) {
+			RemovePreviousBody();
+		} else {
+			Return();
+		}
+		break;
+
+	case 'p':
+		if (state != SETUP) {
+			pause_button = (state == RUNNING) ? true : false;
+		}
+		break;
+
+	case 's':
+		if (state == PAUSED) {
+			Step();
+		}
+		break;
+
+	case 'r':
+		RunSimulation();
+		break;
+	}
 }
 
 /**
@@ -186,34 +209,29 @@ void ofApp::Reset() {
 void ofApp::DrawSetupBodies() {
 	double offset = (double)ofGetWidth() / ((double)body_spheres.size() + 1);
 	double x = offset;
-	for (int i = 0; i < body_spheres.size(); i++) {
-		body_spheres[i].setPosition(x, ofGetHeight()*.6, 0);
+	for (ColoredSphere& sp : body_spheres) {
+		sp.sphere.setPosition(x, ofGetHeight()*.6, 0);
 		x += offset;
 
-		body_spheres[i].rotate(ofGetElapsedTimef() * 75, 0.15, 1.0, 0.0);
+		sp.sphere.rotate(ofGetElapsedTimef() * 75, 0.15, 1.0, 0.0);
 
 		ofPushStyle();
-		ofSetColor(body_color[i]);
-		body_spheres[i].drawWireframe();
+		ofSetColor(sp.color);
+		auto small_sp = sp.sphere;
+		small_sp.setRadius(75);
+		small_sp.drawWireframe();
 		ofPopStyle();
 	}
 }
 
-// TODO: clean up this function
 /**
  * Helper function that draws the GUI to the screen.
  */
 void ofApp::DrawGui() {
 	switch (state) {
 	case SETUP:
-		position_slider.draw();
-		velocity_slider.draw();
-		mass_slider.draw();
-		color_slider.draw();
-		add_button.draw();
 		setup_gui.draw();
-
-		run_button.draw();
+		collision_gui.draw();
 		run_gui.draw();
 		break;
 
@@ -223,10 +241,7 @@ void ofApp::DrawGui() {
 		break;
 
 	case PAUSED:
-		step_slider.draw();
-		step_button.draw();
 		simulation_gui.draw();
-		pause_button.draw();
 		pause_gui.draw();
 		break;
 	}
@@ -236,6 +251,7 @@ void ofApp::DrawGui() {
  * Helper function that switches the state of the application to running.
  */
 void ofApp::RunSimulation() {
+	simulation->SetElasticCollisions(elastic_button);
 	state = RUNNING;
 	ofSetBackgroundColor(0, 0, 0);
 }
@@ -244,11 +260,11 @@ void ofApp::RunSimulation() {
  * Draws each body with the correct color.
  */
 void ofApp::DrawSimulationBodies() {
-	for (int i = 0; i < body_spheres.size(); i++) {
+	for (ColoredSphere& sp : body_spheres) {
 		// Push a new style for each color
 		ofPushStyle();
-		ofSetColor(body_color[i]);
-		body_spheres[i].drawWireframe();
+		ofSetColor(sp.color);
+		sp.sphere.drawWireframe();
 		ofPopStyle();
 	}
 }
@@ -258,13 +274,18 @@ void ofApp::DrawSimulationBodies() {
  * Also adds rotation to the bodies to make them look more realistic.
  */
 void ofApp::UpdateSimulationBodies() {
+	// If there was an inelastic collosion and the number of bodies changed, update the entire list
+	if (simulation->GetBodyCount() != body_spheres.size()) {
+		body_spheres = ColoredSphere::ParseBodies(simulation);
+	}
+
 	vector<ofVec3f> positions = simulation->GetBodyPositions();
 	for (int i = 0; i < body_spheres.size(); i++) {
 		// Set the position of the sphere
-		body_spheres[i].setPosition(positions[i]);
+		body_spheres[i].sphere.setPosition(positions[i]);
 		
 		// Rotate the sphere slightly to aid in the 3d visulaization
-		body_spheres[i].rotate(ofGetElapsedTimef() * 25, 0.15, 1.0, 0.0);
+		body_spheres[i].sphere.rotate(ofGetElapsedTimef() * 25, 0.15, 1.0, 0.0);
 	}
 }
 
@@ -302,61 +323,4 @@ void ofApp::SetupLights() {
 	light2.enable();
 	light3.enable();
 	light4.enable();
-}
-
-
-
-
-
-
-
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg) {
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo) {
-
 }

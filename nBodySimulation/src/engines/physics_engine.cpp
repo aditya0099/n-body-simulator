@@ -2,7 +2,12 @@
 
 
 
-PhysicsEngine::PhysicsEngine(double interval) : time_interval(interval), time(0) { }
+double PhysicsEngine::CalculateRadius(double mass) {
+	return std::cbrt(mass / kMassDensity);
+}
+
+PhysicsEngine::PhysicsEngine(double interval)
+	: time_interval(interval), time(0), body_count(0) { }
 
 /**
  * Adds a body to the simulation
@@ -10,12 +15,16 @@ PhysicsEngine::PhysicsEngine(double interval) : time_interval(interval), time(0)
  * @param v the initial velocity
  * @param m the mass of the boject
  */
-void PhysicsEngine::AddBody(const ofVec3f pos, const ofVec3f v, double m, double r) {
+void PhysicsEngine::AddBody(const ofVec3f pos, const ofVec3f v, 
+		double m, ofColor color) {
 	Body body;
 	body.mass = m;
+	body.velocity = v;
 	body.position = pos;
-	body.radius = r;
+	body.color = color;
 	bodies.push_back(body);
+
+	body_count++;
 }
 
 /**
@@ -27,18 +36,14 @@ void PhysicsEngine::AddBody(const ofVec3f pos, const ofVec3f v, double m, double
  */
 void PhysicsEngine::AddBody(double x,   double y,   double z,
 							double v_x, double v_y, double v_z,
-							double m, double r) {
-	Body body;
-	body.position = ofVec3f(x, y, z);
-	body.velocity = ofVec3f(v_x, v_y, v_z);
-	body.mass = m;
-	body.radius = r;
-	bodies.push_back(body);
+							double m, ofColor color) {
+	AddBody(ofVec3f(x, y, z), ofVec3f(v_x, v_y, v_z), m, color);
 }
 
 void PhysicsEngine::RemovePreviousBody() {
 	if (!bodies.empty()) {
 		bodies.pop_back();
+		body_count--;
 	}
 }
 
@@ -55,4 +60,6 @@ vector<ofVec3f> PhysicsEngine::GetBodyPositions() const {
 	return positions;
 }
 
-
+int PhysicsEngine::GetBodyCount() {
+	return body_count;
+}

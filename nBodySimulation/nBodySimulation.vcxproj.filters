@@ -49,12 +49,11 @@
     <ClCompile Include="src\engines\physics_engine.cpp">
       <Filter>src\engines</Filter>
     </ClCompile>
-    <ClCompile Include="src\engines\many_body.cpp">
-      <Filter>src\engines</Filter>
-    </ClCompile>
-    <ClCompile Include="gui.cpp" />
     <ClCompile Include="src\kd_tree\utils.cpp">
       <Filter>src\kd_tree</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sphere.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -132,10 +131,6 @@
     <ClInclude Include="src\engines\physics_engine.h">
       <Filter>src\engines</Filter>
     </ClInclude>
-    <ClInclude Include="src\engines\many_body.h">
-      <Filter>src\engines</Filter>
-    </ClInclude>
-    <ClInclude Include="gui.h" />
     <ClInclude Include="src\kd_tree\kdtree.cpp">
       <Filter>src\kd_tree</Filter>
     </ClInclude>
@@ -150,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="src\kd_tree\utils.h">
       <Filter>src\kd_tree</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sphere.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -14,9 +14,8 @@ class FewBodyEngine : public PhysicsEngine {
 public:
 	FewBodyEngine(double interval);
 	~FewBodyEngine();
-
 	void update();
-
+	void SetElasticCollisions(bool elastic);
 
 private:
 	ofVec3f CalculateForce(const Body &body) const;
@@ -25,8 +24,12 @@ private:
 	ofVec3f CalculatePosition(const Body &body) const;
 
 	void HandleCollisions();
+	void Collide(int idx_1, int idx_2);
+	bool Intersect(int idx_1, int idx_2);
+
 
 	// Used for efficiently handling collisions
 	KDTree<3>* kd_tree;
+	bool elastic_collisions;
 };
 
