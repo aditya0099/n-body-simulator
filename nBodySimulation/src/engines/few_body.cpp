@@ -4,17 +4,15 @@
 #include <cmath>
 
 /**
- * Constructor; sets the time interval
+ * Constructor that sets the time interval for updates.
+ *
+ * @param interval the step amount for the update loop
  */
-FewBodyEngine::FewBodyEngine(double interval) 
-	: PhysicsEngine(interval), elastic_collisions(true) { }
-
-FewBodyEngine::~FewBodyEngine() {
-	delete kd_tree;
-}
+FewBodyEngine::FewBodyEngine(double interval, bool elastic = false) 
+	: PhysicsEngine(interval), elastic_collisions(elastic) { }
 
 /**
- * Main loop, updates the positions of all the bodies
+ * Main loop, updates the positions of all the bodies based on the step amount.
  */
 void FewBodyEngine::update() {
 	time += time_interval;
@@ -33,6 +31,11 @@ void FewBodyEngine::update() {
 	HandleCollisions();
 }
 
+/**
+ * Allows the user to set the collision type.
+ *
+ * @param elastic true if the collisions should be elastic
+ */
 void FewBodyEngine::SetElasticCollisions(bool elastic) {
 	elastic_collisions = elastic;
 }
@@ -103,7 +106,7 @@ ofVec3f FewBodyEngine::CalculatePosition(const Body &body) const {
 }
 
 /**
- * Handles collisions of the bodies elasitcally or inelastically.
+ * Handles collisions of the bodies elastically or inelastically.
  */
 void FewBodyEngine::HandleCollisions() {
 	for (int i = 0; i < body_count; i++) {
@@ -116,32 +119,58 @@ void FewBodyEngine::HandleCollisions() {
 	}
 }
 
-bool FewBodyEngine::Intersect(int idx_1, int idx_2) {
-	double distance = bodies[idx_1].position.squareDistance(bodies[idx_2].position);
-	double sum_radii = std::pow(CalculateRadius(bodies[idx_1].mass) 
-							  + CalculateRadius(bodies[idx_2].mass), 2);
+/**
+ * Helper function for collision detection. Takes two indices and returns if the
+ * bodies at these indices are in contact.
+ *
+ * @param body1_idx the index of the first body in the bodies list
+ * @param body2_idx the index of the second body in the bodies list
+ * @return true if the bodies are in contact
+ */
+bool FewBodyEngine::Intersect(int body1_idx, int body2_idx) {
+	double distance = bodies[body1_idx].position.squareDistance(bodies[body2_idx].position);
+	double sum_radii = std::pow(CalculateRadius(bodies[body1_idx].mass) 
+							  + CalculateRadius(bodies[body2_idx].mass), 2);
 	
 	return distance <= sum_radii;
 }
 
-void FewBodyEngine::Collide(int idx_1, int idx_2) {
-	Body &m1 = bodies[idx_1];
-	Body &m2 = bodies[idx_2];
+/**
+ * Helper function for collision handling. Calculates the new velocities of the bodies
+ * depending on the type of collision. If the collision is inelastic, the function also
+ * combines the two bodies, storing the result in the first body and deleting the second.
+ *
+ * Formulas taken from:
+ *  - https://en.wikipedia.org/wiki/Elastic_collision
+ *  - https://en.wikipedia.org/wiki/Inelastic_collision
+ *
+ * @param body1_idx the index of the first body in the bodies list
+ * @param body2_idx the index of the second body in the bodies list
+ */
+void FewBodyEngine::Collide(int body1_idx, int body2_idx) {
+	Body &body1 = bodies[body1_idx];
+	Body &body2 = bodies[body2_idx];
 
+	// Apply the appropriate collision handling strategy
 	if (elastic_collisions) {
-		ofVec3f v1 = m1.velocity - (2 * m2.mass / (m1.mass + m2.mass)) * (m1.velocity - m2.velocity).dot(m1.position - m2.position) / (m1.position - m2.position).lengthSquared() * (m1.position - m2.position);
-		ofVec3f v2 = m2.velocity - (2 * m1.mass / (m1.mass + m2.mass)) * (m2.velocity - m1.velocity).dot(m2.position - m1.position) / (m2.position - m1.position).lengthSquared() * (m2.position - m1.position);
+		ofVec3f v1 = body1.velocity - (2 * body2.mass / (body1.mass + body2.mass)) * (body1.velocity - body2.velocity).dot(body1.position - body2.position) / (body1.position - body2.position).lengthSquared() * (body1.position - body2.position);
+		ofVec3f v2 = body2.velocity - (2 * body1.mass / (body1.mass + body2.mass)) * (body2.velocity - body1.velocity).dot(body2.position - body1.position) / (body2.position - body1.position).lengthSquared() * (body2.position - body1.position);
 
-		m1.velocity = v1;
-		m2.velocity = v2;
+		body1.velocity = v1;
+		body2.velocity = v2;
 	} else {
-		m1.velocity = m1.mass / (m1.mass * m2.mass) * m1.velocity
-					+ m2.mass / (m1.mass * m2.mass) * m2.velocity;
-		m1.color = m1.color + m2.color;
-		m1.mass = m1.mass + m2.mass;
-		m1.position = (m1.position + m2.position) / 2;
+		// If the collision is inelastic, use body1 as the new body and update both its mass and velocity
+		// Formula for inelastic collision take from: 
+		body1.velocity = body1.mass / (body1.mass * body2.mass) * body1.velocity
+					+ body2.mass / (body1.mass * body2.mass) * body2.velocity;
+		body1.mass = body1.mass + body2.mass;
 
-		bodies.erase(bodies.begin() + idx_2);
+		// Take the average of the color and position to make the collision appear more natural
+		body1.color = (body1.color + body2.color) / 2;
+		body1.position = (body1.position + body2.position) / 2;
+
+		// Delete body 2 as it has been combined with body 1
+		bodies.erase(bodies.begin() + body2_idx);
 		body_count--;
 	}
 }

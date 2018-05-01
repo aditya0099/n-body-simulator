@@ -12,24 +12,27 @@ using std::vector;
 
 class FewBodyEngine : public PhysicsEngine {
 public:
-	FewBodyEngine(double interval);
-	~FewBodyEngine();
-	void update();
+	// Setup functions
+	FewBodyEngine(double interval, bool elastic);
 	void SetElasticCollisions(bool elastic);
 
+	// Main loop
+	void update();
+
 private:
+	// Position and velocity updating functions
 	ofVec3f CalculateForce(const Body &body) const;
 	ofVec3f CalculateGravity(const Body &body1, const Body &body2) const;
 	ofVec3f CalculateVelocity(const Body &body, const ofVec3f force) const;
 	ofVec3f CalculatePosition(const Body &body) const;
 
+	// Collision handling and detection functions
 	void HandleCollisions();
-	void Collide(int idx_1, int idx_2);
-	bool Intersect(int idx_1, int idx_2);
+	void Collide(int body1_idx, int body2_idx);
+	bool Intersect(int body1_idx, int body2_idx);
 
 
-	// Used for efficiently handling collisions
-	KDTree<3>* kd_tree;
+	KDTree<3>* kd_tree; // TODO: remove
 	bool elastic_collisions;
 };
 

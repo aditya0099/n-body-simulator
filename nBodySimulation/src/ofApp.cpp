@@ -115,14 +115,14 @@ void ofApp::RemovePreviousBody() {
 
 /**
  * Helper function for setting up the GUI at the start of the application.
- * Initilaizes all buttons and sliders to their default values and locations.
+ * Initializes all buttons and sliders to their default values and locations.
  */
 void ofApp::SetupGui() {
 	// SETUP
 	add_button.addListener(this, &ofApp::AddBody);
 	remove_button.addListener(this, &ofApp::RemovePreviousBody);
 
-	setup_gui.setup("bodies", "../data/setup.xml");
+	setup_gui.setup("bodies");
 	setup_gui.add(position_slider.setup("position",
 		ofVec3f(0, 0, 0),
 		ofVec3f(-screen_size*.5, -screen_size*.5, -screen_size*.5),
@@ -169,6 +169,11 @@ void ofApp::Return() {
 	ofSetBackgroundColor(20, 20, 20);
 }
 
+/**
+ * Handles the keyboard shortcuts for the application.
+ *
+ * @param key the key that is pressed
+ */
 void ofApp::keyPressed(int key) {
 	switch (key) {
 	case OF_KEY_RETURN:
@@ -284,7 +289,7 @@ void ofApp::UpdateSimulationBodies() {
 		// Set the position of the sphere
 		body_spheres[i].sphere.setPosition(positions[i]);
 		
-		// Rotate the sphere slightly to aid in the 3d visulaization
+		// Rotate the sphere slightly to aid in the 3d visualization
 		body_spheres[i].sphere.rotate(ofGetElapsedTimef() * 25, 0.15, 1.0, 0.0);
 	}
 }
@@ -303,24 +308,24 @@ void ofApp::Step() {
  * Sets up the light types and positions. Places one in each corner of the screen.
  */
 void ofApp::SetupLights() {
-	light1.setup();
-	light1.setPointLight();
-	light1.setPosition(0, 0, 0);
+	light_l_up.setup();
+	light_l_up.setPointLight();
+	light_l_up.setPosition(0, 0, 0);
 
-	light2.setup();
-	light2.setPointLight();
-	light2.setPosition(ofGetWidth() - 1, 0, 0);
+	light_r_up.setup();
+	light_r_up.setPointLight();
+	light_r_up.setPosition(ofGetWidth() - 1, 0, 0);
 
-	light3.setup();
-	light3.setPointLight();
-	light3.setPosition(0, ofGetHeight() - 1, 0);
+	light_l_down.setup();
+	light_l_down.setPointLight();
+	light_l_down.setPosition(0, ofGetHeight() - 1, 0);
 
-	light4.setup();
-	light4.setPointLight();
-	light4.setPosition(ofGetWidth() - 1, ofGetHeight() - 1, 0);
+	light_r_down.setup();
+	light_r_down.setPointLight();
+	light_r_down.setPosition(ofGetWidth() - 1, ofGetHeight() - 1, 0);
 
-	light1.enable();
-	light2.enable();
-	light3.enable();
-	light4.enable();
+	light_l_up.enable();
+	light_r_up.enable();
+	light_l_down.enable();
+	light_r_down.enable();
 }
