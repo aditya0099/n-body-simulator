@@ -8,8 +8,8 @@
  *
  * @param interval the step amount for the update loop
  */
-FewBodyEngine::FewBodyEngine(double interval, bool elastic = false) 
-	: PhysicsEngine(interval), elastic_collisions(elastic) { }
+FewBodyEngine::FewBodyEngine(double interval, bool elastic) 
+	: PhysicsEngine(interval, elastic) { }
 
 /**
  * Main loop, updates the positions of all the bodies based on the step amount.

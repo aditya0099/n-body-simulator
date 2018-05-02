@@ -8,8 +8,8 @@ double PhysicsEngine::CalculateRadius(double mass) {
 	return std::cbrt(mass / kMassDensity);
 }
 
-PhysicsEngine::PhysicsEngine(double interval)
-	: time_interval(interval), time(0), body_count(0) { }
+PhysicsEngine::PhysicsEngine(double interval, bool elastic)
+	: time_interval(interval), elastic_collisions(elastic), time(0), body_count(0) { }
 
 /**
  * Adds a body to the simulation

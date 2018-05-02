@@ -2,13 +2,16 @@
 #include "engines\few_body.h"
 #include "sphere.h"
 
+const string ofApp::kXmlFileName = "setup.xml";
+
 /**
  * Called at the start of the application. Sets up the
  * physics engine, GUI, camera and lights.
  */
 void ofApp::setup() {
-	ofSetFullscreen(true);
 	state = SETUP;
+
+	ofSetFullscreen(false);
 	simulation = new FewBodyEngine(0.02);
 
 	SetupGui();
@@ -16,6 +19,10 @@ void ofApp::setup() {
 
 	ofSetBackgroundColor(20, 20, 20);
 	camera.setDistance(500);
+
+	xml = new XmlHelper(kXmlFileName);
+	
+	ReadXml();
 }
 
 /**
@@ -42,7 +49,7 @@ void ofApp::update() {
 		break;
 	}
 
-	// Always update the body posiiton incase of stepping
+	// Always update the body position in case of stepping
 	UpdateSimulationBodies();
 }
 
@@ -77,6 +84,7 @@ void ofApp::draw() {
  */
 void ofApp::exit() {
 	delete simulation;
+	delete xml;
 }
 
 /**
@@ -101,6 +109,9 @@ void ofApp::AddBody() {
 
 	// Randomize the color for the next body
 	color_slider = ofColor(rand() % 255, rand() % 255, rand() % 255);
+
+	// Add the body to the XML file
+	xml->WriteBody(position, velocity, mass, color);
 }
 
 /**
@@ -111,6 +122,8 @@ void ofApp::RemovePreviousBody() {
 	if (!body_spheres.empty()) {
 		body_spheres.pop_back();
 	}
+
+	xml->ErasePreviousBody();
 }
 
 /**
@@ -118,15 +131,18 @@ void ofApp::RemovePreviousBody() {
  * Initializes all buttons and sliders to their default values and locations.
  */
 void ofApp::SetupGui() {
-	// SETUP
+	// Get the average screen dimensions
+	double screen_size = (ofGetWidth() + ofGetHeight()) / 2;
+
+	// Gui for setup screen
 	add_button.addListener(this, &ofApp::AddBody);
 	remove_button.addListener(this, &ofApp::RemovePreviousBody);
 
 	setup_gui.setup("bodies");
 	setup_gui.add(position_slider.setup("position",
 		ofVec3f(0, 0, 0),
-		ofVec3f(-screen_size*.5, -screen_size*.5, -screen_size*.5),
-		ofVec3f(screen_size*.5, screen_size*.5, screen_size*.5)));
+		ofVec3f(-screen_size*.25, -screen_size*.25, -screen_size*.25),
+		ofVec3f(screen_size*.25, screen_size*.25, screen_size*.25)));
 	setup_gui.add(velocity_slider.setup("velocity",
 		ofVec3f(0, 0, 0), ofVec3f(-10, -10, -10), ofVec3f(10, 10, 10)));
 	setup_gui.add(mass_slider.setup("mass", 10, 1, 100));
@@ -137,7 +153,7 @@ void ofApp::SetupGui() {
 	setup_gui.add(remove_button.setup("remove"));
 
 
-	// RUNNING
+	// Gui for running screen
 	run_button.addListener(this, &ofApp::RunSimulation);
 
 	run_gui.setup("run");
@@ -145,7 +161,7 @@ void ofApp::SetupGui() {
 	run_gui.add(run_button.setup("start simulation"));
 	run_gui.setPosition(setup_gui.getWidth() + 20, 10);
 
-	// PAUSED
+	// Gui for paused screen
 	exit_button.addListener(this, &ofApp::Return);
 	step_button.addListener(this, &ofApp::Step);
 
@@ -164,13 +180,19 @@ void ofApp::SetupGui() {
  * Reverts a running simulation to its setup state.
  */
 void ofApp::Return() {
-	// TODO: load from xml
+	// TODO: load from XML
 	state = SETUP;
 	ofSetBackgroundColor(20, 20, 20);
 }
 
 /**
  * Handles the keyboard shortcuts for the application.
+ * 
+ * SETUP:
+ * - BACKSPACE - remove previous body
+ * - ENTER - add body with current settings
+ * - 'r' - run simulation
+ * - ESC - close application
  *
  * @param key the key that is pressed
  */
@@ -201,10 +223,16 @@ void ofApp::keyPressed(int key) {
 			Step();
 		}
 		break;
-
+	
 	case 'r':
-		RunSimulation();
+		if (state == SETUP) {
+			RunSimulation();
+		}
 		break;
+
+	case OF_KEY_ESC:
+		exit();
+		std::exit(0);
 	}
 }
 
@@ -279,7 +307,7 @@ void ofApp::DrawSimulationBodies() {
  * Also adds rotation to the bodies to make them look more realistic.
  */
 void ofApp::UpdateSimulationBodies() {
-	// If there was an inelastic collosion and the number of bodies changed, update the entire list
+	// If there was an inelastic collision and the number of bodies changed, update the entire list
 	if (simulation->GetBodyCount() != body_spheres.size()) {
 		body_spheres = ColoredSphere::ParseBodies(simulation);
 	}
@@ -328,4 +356,24 @@ void ofApp::SetupLights() {
 	light_r_up.enable();
 	light_l_down.enable();
 	light_r_down.enable();
+}
+
+void ofApp::ReadXml() {
+	if (xml->IsEmpty()) {
+		return;
+	}
+
+	// Stops the AddBody function from creating duplicates
+	xml->SetReadOnly(true);
+
+	for (int i = 0; i < xml->GetBodyCount(); i++) {
+		position_slider = xml->GetPosition(i);
+		velocity_slider = xml->GetVelocity(i);
+		mass_slider = xml->GetMass(i);
+		color_slider = xml->GetColor(i);
+
+		AddBody();
+	}
+
+	xml->SetReadOnly(false);
 }

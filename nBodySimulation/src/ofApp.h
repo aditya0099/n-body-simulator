@@ -4,7 +4,7 @@
 #include "ofxGui.h"
 #include "engines\physics_engine.h"
 #include "sphere.h"
-#include "ofxXmlSettings.h"
+#include "xml_helpers.h"
 
 class ofApp : public ofBaseApp {
 
@@ -18,14 +18,16 @@ public:
 	void keyPressed(int key);
 
 private:
+	static const string kXmlFileName;
 	/**
 	 * Enumeration to represent the state of the program
-	 *
+	 * 
 	 * SETUP - the phase where the initial conditions are set
 	 * RUNNING - the simulation is allowed to run at the default rate
 	 * PAUSED - the simulation is frozen and can be stepped through
 	 */
 	enum ProgramState {
+		INIT,
 		SETUP,
 		RUNNING,
 		PAUSED
@@ -38,6 +40,7 @@ private:
 	// Simulation setup functions
 	void AddBody();
 	void RemovePreviousBody();
+	void ReadXml();
 
 	// Button handlers
 	void RunSimulation();
@@ -68,7 +71,7 @@ private:
 	ofEasyCam camera;
 
 	// XML reader and writer
-	ofxXmlSettings xml;
+	XmlHelper* xml;
 
 	// GUI items
 	ofxPanel setup_gui;

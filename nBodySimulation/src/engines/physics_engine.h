@@ -23,13 +23,14 @@ public:
 	static double CalculateRadius(double mass);
 
 	// Setup functions
-	PhysicsEngine(double interval);
+	PhysicsEngine(double interval, bool elastic);
 
 	void AddBody(ofVec3f position, ofVec3f velocity, double  mass, ofColor color);
 	void AddBody(double x,   double y,   double z, 
 				 double v_x, double v_y, double v_z,
 				 double mass, ofColor color);
 	void RemovePreviousBody();
+	virtual void SetElasticCollisions(bool elastic) = 0;
 
 	// Main loop
 	virtual void update() = 0;
@@ -59,5 +60,6 @@ protected:
 	int body_count;
 	double time_interval;
 	double time;
+	bool elastic_collisions;
 };
 

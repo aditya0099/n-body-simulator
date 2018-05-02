@@ -13,7 +13,7 @@ using std::vector;
 class FewBodyEngine : public PhysicsEngine {
 public:
 	// Setup functions
-	FewBodyEngine(double interval, bool elastic);
+	FewBodyEngine(double interval, bool elastic = false);
 	void SetElasticCollisions(bool elastic);
 
 	// Main loop
@@ -33,6 +33,5 @@ private:
 
 
 	KDTree<3>* kd_tree; // TODO: remove
-	bool elastic_collisions;
 };
 

@@ -55,6 +55,7 @@
     <ClCompile Include="src\sphere.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\xml_helpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -149,6 +150,7 @@
     <ClInclude Include="src\sphere.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\xml_helpers.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
