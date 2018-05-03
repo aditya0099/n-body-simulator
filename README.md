@@ -20,7 +20,31 @@ The camera can be manipulated using the mouse. Click and drag with the left mous
 
 Note: if inelastic collisions are selected, the collision will result in two bodies combining to form a larger body. This will cause the new body to be larger and take on the average color between the two source bodies.   
 
+## Pausing and stepping through the simulation
+Press `pause` button, or the `p` key, to pause the simulation. Now, an additional set of controls will appear on the left that will allow you to step through frames of the simulation. Set the step amount using the slider and press the `step` button or the `s` key to step through the simulation frame by frame, or to skip ahead by multiple frames. Note that the camera will still function normally when the simulation is paused
+
+Tip: hold down the l`s` with a large step amount to speed up the simulation.
+
 At any time, press the `reset` button or `BACKSPACE` to return to the setup screen, or press `ESC` to quit the application.
 
-## Pausing and stepping through the simulation
-Press `pause` button, or the `p` key, to pause the simulation. Now, an additional set of controls will appear on the left that will allow you to step through frames of the simulation. Set the step amount using the slider and press the `step` button or the `s` key to step through the simulation frame by frame, or to skip ahead by multiple frames. Tip: hold down the l`s` with a large step amount to speed up the simulation.
+## Loading settings from an XML file
+To load settings from an XML file, navigate to the `bin/data` folder and open the file called `setup.xml`. Bodies are stored in the following format:
+```<body>
+    <position>
+        <x>0.000000000</x>
+        <y>0.000000000</y>
+        <z>0.000000000</z>
+    </position>
+    <velocity>
+        <x>0.000000000</x>
+        <y>0.000000000</y>
+        <z>0.000000000</z>
+    </velocity>
+    <color>
+        <r>0</r>
+        <g>0</g>
+        <b>0</b>
+    </color>
+    <mass>1.000000000</mass>
+</body>
+```
