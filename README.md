@@ -94,7 +94,7 @@ The basic class structure for a PhysicsEngine implementation will look something
 ```c++
 class MyPhysicsEngine : public PhysicsEngine {
 public:
-	void SetElasticCollisions(bool elastic);
+    void SetElasticCollisions(bool elastic);
     void update();
 
 private:
