@@ -8,8 +8,11 @@ double PhysicsEngine::CalculateRadius(double mass) {
 	return std::cbrt(mass / kMassDensity);
 }
 
+/**
+ * Constructor. Takes the time increment interval for the update function and the collision type.
+ */
 PhysicsEngine::PhysicsEngine(double interval, bool elastic)
-	: time_interval(interval), elastic_collisions(elastic), time(0), body_count(0) { }
+	: time_interval_(interval), elastic_collisions_(elastic), time_(0), body_count_(0) { }
 
 /**
  * Adds a body to the simulation
@@ -24,9 +27,9 @@ void PhysicsEngine::AddBody(ofVec3f position, ofVec3f velocity,
 	body.velocity = velocity;
 	body.position = position;
 	body.color = color;
-	bodies.push_back(body);
+	bodies_.push_back(body);
 
-	body_count++;
+	body_count_++;
 }
 
 /**
@@ -46,9 +49,9 @@ void PhysicsEngine::AddBody(double x,   double y,   double z,
  * Removes the most recently added body.
  */
 void PhysicsEngine::RemovePreviousBody() {
-	if (!bodies.empty()) {
-		bodies.pop_back();
-		body_count--;
+	if (!bodies_.empty()) {
+		bodies_.pop_back();
+		body_count_--;
 	}
 }
 
@@ -58,7 +61,7 @@ void PhysicsEngine::RemovePreviousBody() {
  */
 vector<ofVec3f> PhysicsEngine::GetBodyPositions() const {
 	vector<ofVec3f> positions;
-	for (Body m : bodies) {
+	for (Body m : bodies_) {
 		positions.push_back(m.position);
 	}
 
@@ -67,6 +70,6 @@ vector<ofVec3f> PhysicsEngine::GetBodyPositions() const {
 /**
  * Returns the total number of bodies in the simulation at the current time.
  */
-int PhysicsEngine::GetBodyCount() {
-	return body_count;
+int PhysicsEngine::CountBodies() {
+	return body_count_;
 }

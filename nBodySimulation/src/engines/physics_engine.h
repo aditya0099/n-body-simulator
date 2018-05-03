@@ -11,6 +11,7 @@
  * a collision handling function.
  */
 class PhysicsEngine {
+	// Allows ColoredSphere to access the private Body struct. See "src/sphere.h"
 	friend struct ColoredSphere;
 public:
 	// Constants
@@ -18,6 +19,8 @@ public:
 	static constexpr double kMassDensity = 0.001;
 	// Newton's gravitational constant
 	static constexpr double kG = 0.000000000066742;
+	// Default time interval for updating
+	static constexpr double kDefaultInterval = 0.02;
 
 	// Static function used to scale body radius by mass
 	static double CalculateRadius(double mass);
@@ -37,7 +40,7 @@ public:
 
 	// Getters
 	vector<ofVec3f> GetBodyPositions() const;
-	int GetBodyCount();
+	int CountBodies();
 protected:
 	/**
 	 * Represents a body which has an associated mass, velocity and position.
@@ -54,12 +57,12 @@ protected:
 	virtual void HandleCollisions() = 0;
 
 	// Stores the simulation bodies
-	vector<Body> bodies;
+	vector<Body> bodies_;
 
 	// Auxiliary information
-	int body_count;
-	double time_interval;
-	double time;
-	bool elastic_collisions;
+	int body_count_;
+	double time_interval_;
+	double time_;
+	bool elastic_collisions_;
 };
 

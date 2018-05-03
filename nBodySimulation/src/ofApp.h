@@ -54,44 +54,44 @@ private:
 	void DrawSetupBodies();
 	void DrawSimulationBodies();
 	void DrawGui();
+	void DrawInstructions();
 
-	// Control variable
-	ProgramState state;
+	// Control variables
+	ProgramState state_;
 	
-	// Simulation and auxiliary information
-	PhysicsEngine *simulation;
-	int body_count;
+	// Main simulation driver
+	PhysicsEngine *simulation_;
 
 	// 3d objects, lights and camera
-	vector<ColoredSphere> body_spheres;
-	ofLight light_l_up;
-	ofLight light_r_up;
-	ofLight light_l_down;
-	ofLight light_r_down;
-	ofEasyCam camera;
+	vector<ColoredSphere> body_spheres_;
+	ofLight light_l_up_;
+	ofLight light_r_up_;
+	ofLight light_l_down_;
+	ofLight light_r_down_;
+	ofEasyCam camera_;
 
 	// XML reader and writer
-	XmlHelper* xml;
+	XmlHelper* xml_;
 
 	// GUI items
-	ofxPanel setup_gui;
-	ofxVec3Slider position_slider;
-	ofxVec3Slider velocity_slider;
-	ofxSlider<double> mass_slider;
-	ofxColorSlider color_slider;
-	ofxButton add_button;
-	ofxButton remove_button;
+	ofxPanel setup_gui_;
+	ofxVec3Slider position_slider_;
+	ofxVec3Slider velocity_slider_;
+	ofxSlider<double> mass_slider_;
+	ofxColorSlider color_slider_;
+	ofxButton add_button_;
+	ofxButton remove_button_;
 
-	ofxPanel collision_gui;
-	ofxToggle elastic_button;
+	ofxPanel collision_gui_;
+	ofxToggle elastic_button_;
 
-	ofxPanel run_gui;
-	ofxButton run_button;
+	ofxPanel run_gui_;
+	ofxButton run_button_;
 
-	ofxPanel simulation_gui;
-	ofxPanel pause_gui;
-	ofxToggle pause_button;
-	ofxButton step_button;
-	ofxSlider<double> step_slider;
-	ofxButton exit_button;
+	ofxPanel simulation_gui_;
+	ofxPanel pause_gui_;
+	ofxToggle pause_button_;
+	ofxButton step_button_;
+	ofxSlider<double> step_slider_;
+	ofxButton return_button_;
 };

@@ -2,8 +2,6 @@
 
 #include "physics_engine.h"
 #include "ofVec3f.h"
-#include "../kd_tree/kdtree.h"
-#include "../kd_tree/utils.h"
 
 #include <vector>
 
@@ -13,7 +11,7 @@ using std::vector;
 class FewBodyEngine : public PhysicsEngine {
 public:
 	// Setup functions
-	FewBodyEngine(double interval, bool elastic = false);
+	FewBodyEngine(double interval = kDefaultInterval, bool elastic = false);
 	void SetElasticCollisions(bool elastic);
 
 	// Main loop
@@ -30,8 +28,5 @@ private:
 	void HandleCollisions();
 	void Collide(int body1_idx, int body2_idx);
 	bool Intersect(int body1_idx, int body2_idx);
-
-
-	KDTree<3>* kd_tree; // TODO: remove
 };
 

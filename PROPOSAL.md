@@ -11,10 +11,10 @@ The goal of this project is to create an application that can model and visulaiz
 * Mass of each body
 * Initial position of each body in 3D space
 * Initial velocity of each body
-* Laws governing the motion of the bodies (if time permits):
-    * Gravitational constant (`G`)
-    * Newton's inverse square law
-    * Kepler's laws of planetary motion
+* Color of each body
+* Type of collisions that the bodies should undergo:
+    * Perfectly elastic
+    * Perfectly inelastic
 
 From these initial conditions the application will generate a 3D visualization, with spheres representing the various bodies. The relative distance between and masses of the bodies will be indicated by the relative sizes of the spheres. During the simulation, the user will have the ability to pause and step through the frames of the simulation. They will also be able to adjust the point of view of the simulation.
 
@@ -25,8 +25,8 @@ This project will make use of the following libraries:
 1. [ofMath](http://openframeworks.cc/documentation/math/) - this library will be used to perform the physical calculations at each frame of the simulation. This will inform the visualization by describing the motions and the positions of the bodies.
 1. [of3d](http://openframeworks.cc/documentation/3d/) - this library will be used to visualize the simulation by generating,  moving and resizing spheres to represent the bodies, their motion and their relative positions.
 1. [OpenGL](http://openframeworks.cc/documentation/gl/) - this library will be used at a later stage for more advanced graphics such as adding textures to the bodies and rendering a more dynamic background.
-1. [ofxGui](http://openframeworks.cc/documentation/ofxGui/) - this library will be used to take user input regarding the initial states of the simulation in a user friendly way. It will also be used during the simulation to pause and step through the frames and to manipulate the point of view in the simulation.
-1. [ofxXmlSettings](http://openframeworks.cc/documentation/ofxXmlSettings/) - this library will be used to save and load user input in a more efficient way. It will also be used to store the state of a certain simulation for reloading (if time permits).
+1. [ofxGui](http://openframeworks.cc/documentation/ofxGui/) - this library will be used to take user input regarding the initial states of the simulation in a user friendly way. It will also be used during the simulation to pause and step through the frames.
+1. [ofxXmlSettings](http://openframeworks.cc/documentation/ofxXmlSettings/) - this library will be used to save and load user input in a more efficient way. It will also be used to store the state of a certain simulation for reloading.
 
 ## Further Reading
 For more information regarding the N-Body problem, the reader may consult the following resources:

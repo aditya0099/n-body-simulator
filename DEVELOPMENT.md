@@ -26,3 +26,19 @@ Instead of implementing two different physics engines, I have decided to add a s
     * Figuring out how the ofEasyCamera works
 * Structuring and logically splitting the code between the update and draw loops.
 * Floating point underflow because ofVector uses floats and my code used doubles
+
+## Week 3
+### Summary
+This week I accomplished two main goals of the project. The first was a collision handling system and the second was interaction with an XML file.
+
+For the collision handling system, I found and implemented the vector equations for perfectly elastic and perfectly inelastic collisions. To do this, I had to give the bodies a defined size, which I based off of the mass of the body. I set a constant density and scaled the radii of the masses by this constant mass density.
+
+For the XML portion, I implemented a system which automatically saved the initial state of the simulation to an XML file during the setup phase. If the simulation is run and then quit, it will revert to this initial state. Furthermore, if the application is closed and reopened, it will reload the previous state. Finally, the XML file can be manually edited before startup and these changes will reflect after startup.
+
+### Challenges
+* Learning the equations for elastic collisions in 3 dimensions:
+    * I realized that three dimensional collisions can be treated like two dimensional collisions.
+    * This is because the collisions take place on the plane of the two velocity vectors.
+* Understanding ofxXmlSettings:
+    * I quickly realized that this library cannot  be used to open an arbitrarily located XML file. Instead, the file had to be located in /bin/data.
+    * I also had trouble understanding how to enter and exit nodes of the XML file. I eventually understood that this was done in a stack-like manner.
