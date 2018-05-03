@@ -29,7 +29,7 @@ At any time, press the `reset` button or `BACKSPACE` to return to the setup scre
 
 ## Loading settings from an XML file
 To load settings from an XML file, navigate to the `bin/data` folder and open the file called `setup.xml`. Bodies are stored in the following format:
-```
+```xml
 <body>
     <position>
         <x>0.000000000</x>
@@ -91,7 +91,7 @@ To create your own physics engine, you must write a class that inherits from Phy
 * `::HandleCollisions` - which takes care of the edge case when two bodies are in the same position. Note that this function need not actually do anything. The goal of making this a pure virtual function was to force a developer to consider this key edge case.
 
 The basic class structure for a PhysicsEngine implementation will look something like this:
-```
+```c++
 class MyPhysicsEngine : public PhysicsEngine {
 public:
 	void SetElasticCollisions(bool elastic);
