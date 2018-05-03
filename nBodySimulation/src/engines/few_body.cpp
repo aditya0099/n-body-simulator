@@ -15,16 +15,16 @@ FewBodyEngine::FewBodyEngine(double interval, bool elastic)
  * Main loop, updates the positions of all the bodies based on the step amount.
  */
 void FewBodyEngine::update() {
-	time += time_interval;
+	time_ += time_interval_;
 	
 	// Calculate the forces acting on all the bodies and update the velocity
-	for (Body &m : bodies) {
+	for (Body &m : bodies_) {
 		ofVec3f force = CalculateForce(m);
 		m.velocity = CalculateVelocity(m, force);
 	}
 
 	// Finally, update all positions based on the new velocities
-	for (Body &m : bodies) {
+	for (Body &m : bodies_) {
 		m.position = CalculatePosition(m);
 	}
 
@@ -37,7 +37,7 @@ void FewBodyEngine::update() {
  * @param elastic true if the collisions should be elastic
  */
 void FewBodyEngine::SetElasticCollisions(bool elastic) {
-	elastic_collisions = elastic;
+	elastic_collisions_ = elastic;
 }
 
 /**
@@ -51,7 +51,7 @@ ofVec3f FewBodyEngine::CalculateForce(const Body &body) const {
 	ofVec3f net_force(0, 0, 0);
 
 	// Loop through each body and sum up the forces
-	for (const Body &m : bodies) {
+	for (const Body &m : bodies_) {
 		net_force = net_force + CalculateGravity(m, body);
 	}
 
@@ -92,7 +92,7 @@ ofVec3f FewBodyEngine::CalculateGravity(const Body &m1, const Body &m2) const {
  */
 ofVec3f FewBodyEngine::CalculateVelocity(const Body &body, const ofVec3f force) const {
 	ofVec3f acceleration = force / body.mass;
-	return body.velocity + (acceleration * time_interval);
+	return body.velocity + (acceleration * time_interval_);
 }
 
 /**
@@ -102,15 +102,15 @@ ofVec3f FewBodyEngine::CalculateVelocity(const Body &body, const ofVec3f force) 
 * @return the new position of the body
 */
 ofVec3f FewBodyEngine::CalculatePosition(const Body &body) const {
-	return body.position + body.velocity * (float)time_interval;
+	return body.position + body.velocity * (float)time_interval_;
 }
 
 /**
  * Handles collisions of the bodies elastically or inelastically.
  */
 void FewBodyEngine::HandleCollisions() {
-	for (int i = 0; i < body_count; i++) {
-		for (int j = 0; j < body_count; j++) {
+	for (int i = 0; i < body_count_; i++) {
+		for (int j = 0; j < body_count_; j++) {
 			if (Intersect(i, j)	&& i != j) {
 				Collide(i, j);
 				return;
@@ -128,9 +128,9 @@ void FewBodyEngine::HandleCollisions() {
  * @return true if the bodies are in contact
  */
 bool FewBodyEngine::Intersect(int body1_idx, int body2_idx) {
-	double distance = bodies[body1_idx].position.squareDistance(bodies[body2_idx].position);
-	double sum_radii = std::pow(CalculateRadius(bodies[body1_idx].mass) 
-							  + CalculateRadius(bodies[body2_idx].mass), 2);
+	double distance = bodies_[body1_idx].position.squareDistance(bodies_[body2_idx].position);
+	double sum_radii = std::pow(CalculateRadius(bodies_[body1_idx].mass) 
+							  + CalculateRadius(bodies_[body2_idx].mass), 2);
 	
 	return distance <= sum_radii;
 }
@@ -148,11 +148,11 @@ bool FewBodyEngine::Intersect(int body1_idx, int body2_idx) {
  * @param body2_idx the index of the second body in the bodies list
  */
 void FewBodyEngine::Collide(int body1_idx, int body2_idx) {
-	Body &body1 = bodies[body1_idx];
-	Body &body2 = bodies[body2_idx];
+	Body &body1 = bodies_[body1_idx];
+	Body &body2 = bodies_[body2_idx];
 
 	// Apply the appropriate collision handling strategy
-	if (elastic_collisions) {
+	if (elastic_collisions_) {
 		ofVec3f v1 = body1.velocity - (2 * body2.mass / (body1.mass + body2.mass)) * (body1.velocity - body2.velocity).dot(body1.position - body2.position) / (body1.position - body2.position).lengthSquared() * (body1.position - body2.position);
 		ofVec3f v2 = body2.velocity - (2 * body1.mass / (body1.mass + body2.mass)) * (body2.velocity - body1.velocity).dot(body2.position - body1.position) / (body2.position - body1.position).lengthSquared() * (body2.position - body1.position);
 
@@ -170,7 +170,7 @@ void FewBodyEngine::Collide(int body1_idx, int body2_idx) {
 		body1.position = (body1.position + body2.position) / 2;
 
 		// Delete body 2 as it has been combined with body 1
-		bodies.erase(bodies.begin() + body2_idx);
-		body_count--;
+		bodies_.erase(bodies_.begin() + body2_idx);
+		body_count_--;
 	}
 }
