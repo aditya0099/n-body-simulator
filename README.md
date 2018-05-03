@@ -71,10 +71,33 @@ The ofApp class is the main application class that contains the three core funct
 Each of these three core functions have associated helper functions that break down these wide scopes into specific action items.
 
 ## Physics - PhysicsEngine
-The PhysicsEngine class handles the math for the simulation. This is an abstract class that can be implemented using a variety of techniques, one of which I have demonstrated in the FewBodyEngine class. It requires that all implementations do the following:
+The PhysicsEngine class handles the math for the simulation. This is an abstract class that can be implemented using a variety of techniques, one of which I have demonstrated in the FewBodyEngine class. Implementations contain implementations for the following:
 * `::update` - which should calculate the force on each body and update their positions given at time increment.
 * `::HandleCollisions` - which should check for the edge case where two bodies have the same position.
 
 Some important functions that it contains implementations of are:
 * `::AddBody` - which allows the user to add bodies to the simulation with set initial parameters
 * `::RemovePreviousBody` - which allows the user to remove a body from the simulation.
+
+It also stores some key constants that are used throughout:
+* `kG` - Newton's gravitational constant
+* `kMassDensity` - Used to scale the body radius by its mass
+* `kDefaultInterval` - Default time increment interval
+
+## Creating your own physics engine
+To create your own physics engine, you must write a class that inherits from PhysicsEngine and implements the following functions:
+* `::update` - which indicates a time increment and handles the motion of the bodies
+* `::SetElasticCollision` - which allows the user to specify a collision type.
+* `::HandleCollisions` - which takes care of the edge case when two bodies are in the same position. Note that this function need not actually do anything. The goal of making this a pure virtual function was to force a developer to consider this key edge case.
+
+The basic class structure for a PhysicsEngine implementation will look something like this:
+```
+class MyPhysicsEngine : public PhysicsEngine {
+public:
+	void SetElasticCollisions(bool elastic);
+    void update();
+
+private:
+	void HandleCollisions();
+};
+```
