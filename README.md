@@ -29,7 +29,8 @@ At any time, press the `reset` button or `BACKSPACE` to return to the setup scre
 
 ## Loading settings from an XML file
 To load settings from an XML file, navigate to the `bin/data` folder and open the file called `setup.xml`. Bodies are stored in the following format:
-```<body>
+```
+<body>
     <position>
         <x>0.000000000</x>
         <y>0.000000000</y>
@@ -48,3 +49,32 @@ To load settings from an XML file, navigate to the `bin/data` folder and open th
     <mass>1.000000000</mass>
 </body>
 ```
+# Code description
+The classes and code files can be divided into three broad categories: application, physics and bridge:
+* Application
+    * `ofApp`
+    * `XmlHelper`
+* Physics
+    * `PhysicsEngine`
+    * `FewBodyEngine`
+* Bridge
+    * `ColoredSphere`
+
+I will outline toe most significant of these classes in the following sections
+
+## Application - ofApp
+The ofApp class is the main application class that contains the three core functions that allow for the running of the application:
+* `::setup` - which loads data from the XML file initializes various parts of the application including lights/camera, GUI, and physics engine.
+* `::update` - which updates that the simulation engine and takes input from the GUI.
+* `::draw` - which pulls data from the simulation engine, handles the 3d rendering and draws the GUI.
+
+Each of these three core functions have associated helper functions that break down these wide scopes into specific action items.
+
+## Physics - PhysicsEngine
+The PhysicsEngine class handles the math for the simulation. This is an abstract class that can be implemented using a variety of techniques, one of which I have demonstrated in the FewBodyEngine class. It requires that all implementations do the following:
+* `::update` - which should calculate the force on each body and update their positions given at time increment.
+* `::HandleCollisions` - which should check for the edge case where two bodies have the same position.
+
+Some important functions that it contains implementations of are:
+* `::AddBody` - which allows the user to add bodies to the simulation with set initial parameters
+* `::RemovePreviousBody` - which allows the user to remove a body from the simulation.
