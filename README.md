@@ -100,6 +100,6 @@ public:
     void update();
 
 private:
-	void HandleCollisions();
+    void HandleCollisions();
 };
 ```
