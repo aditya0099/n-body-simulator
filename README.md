@@ -1,5 +1,7 @@
 # N-Body Simulator
 
+_**Note:** This project uses openFrameworks which can be downloaded [here](https://openframeworks.cc/download/). To learn more, visit [openframeworks.cc](https://openframeworks.cc)._
+
 ## Simulation Instructions
 ### The setup screen
 To start, all you have to do is run the application. When the application is run the screen shown is called the setup screen. Here, you can add bodies to the simulation by manipulating the sliders on the top left. These sliders allow you to adjust the following:
